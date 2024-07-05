@@ -14,7 +14,7 @@ public class Multiplicator : MonoBehaviour
     private float _minCoordinateOfPosition = -1;
     private float _maxCoordinateOfPosition = 1;
     private int _minNumberOfObjects = 2;
-    private int _maxNumberOfObjects = 6;
+    private int _maxNumberOfObjects = 7;
     private int _counterOfObjects;
 
     public void Awake()
