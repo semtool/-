@@ -5,7 +5,7 @@ public class Cube : MonoBehaviour
     [SerializeField] private Cube _cube;
 
     private Multiplicator _multiplicator;
-    private float _chanceToDivide = 10;
+    public float _chanceToDivide = 10;
     private float _reductorOfProbability = 2;
     private float _scale;
     private float _reductor = 2f;
@@ -37,7 +37,7 @@ public class Cube : MonoBehaviour
     }
 
     public float GetChance()
-    {
+    {        
         return _chanceToDivide;
     }
 

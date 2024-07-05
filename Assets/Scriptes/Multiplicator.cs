@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Multiplicator : MonoBehaviour
 {
-    [SerializeField] private Cube _obj;
+    [SerializeField] private Cube _cube;
 
     private Exploder _exploder;
     private List<Cube> _cubes;
@@ -14,7 +14,7 @@ public class Multiplicator : MonoBehaviour
     private float _minCoordinateOfPosition = -1;
     private float _maxCoordinateOfPosition = 1;
     private int _minNumberOfObjects = 2;
-    private int _maxNumberOfObjects = 7;
+    private int _maxNumberOfObjects = 6;
     private int _counterOfObjects;
 
     public void Awake()
@@ -29,7 +29,7 @@ public class Multiplicator : MonoBehaviour
 
     public void ClonObjects()
     {
-        _currentChance = _obj.GetChance();
+        _currentChance = _cube.GetChance();
         _randomNumber = GetRandomNumber();
 
         if (_randomNumber <= _currentChance)
@@ -57,6 +57,7 @@ public class Multiplicator : MonoBehaviour
         while (_counterOfObjects < numberOfObjects)
         {
             _cubes.Add(CreateClon());
+            
             _counterOfObjects++;
         }
     }
@@ -68,7 +69,7 @@ public class Multiplicator : MonoBehaviour
 
     private Cube CreateClon()
     {
-        Cube clon = Instantiate(_obj, new Vector3(_obj.transform.position.x + GetRandomPosition(), 0.5f, _obj.transform.position.z + GetRandomPosition()), Quaternion.identity);
+        Cube clon = Instantiate(_cube, new Vector3(_cube.transform.position.x + GetRandomPosition(), 0.5f, _cube.transform.position.z + GetRandomPosition()), Quaternion.identity);
         clon.ChangeScale();
         clon.ChangeColor();
         clon.CangeChance();
