@@ -1,15 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class Multiplicator : MonoBehaviour
 {
     [SerializeField] private Cube _obj;
 
+    private Exploder _exploder;
     private List<Cube> _cubes;
-    private Cube _cube;
     private float _maxNumber = 0;
     private float _minNumber = 10;
     private float _currentChance;
@@ -19,21 +16,26 @@ public class Multiplicator : MonoBehaviour
     private int _minNumberOfObjects = 2;
     private int _maxNumberOfObjects = 7;
     private int _counterOfObjects;
-    private float _delay = 0;
 
-    private void Awake()
+    public void Awake()
     {
-        _cube = GetComponent<Cube>();
+        _exploder = GetComponent<Exploder>();
     }
 
-    public void OnMouseUpAsButton()
+    public void ExplodeCube()
     {
-        StartCoroutine(ClonObjects());
+        _exploder.DeleteCube(_cubes);
     }
 
-    public List<Cube> GetStruckObjects()
+    public void ClonObjects()
     {
-        return _cubes;
+        _currentChance = _obj.GetChance();
+        _randomNumber = GetRandomNumber();
+
+        if (_randomNumber <= _currentChance)
+        {
+            CreateClones();
+        }
     }
 
     private int GetRandomNumberOfObjects()
@@ -44,19 +46,6 @@ public class Multiplicator : MonoBehaviour
     private float GetRandomNumber()
     {
         return Random.Range(_minNumber, _maxNumber);
-    }
-
-    private IEnumerator ClonObjects()
-    {
-        yield return new WaitForSeconds(_delay);
-
-        _currentChance = _cube.GetChance();
-        _randomNumber = GetRandomNumber();
-
-        if (_randomNumber <= _currentChance)
-        {
-            CreateClones();
-        }
     }
 
     private void CreateClones()
@@ -72,12 +61,12 @@ public class Multiplicator : MonoBehaviour
         }
     }
 
-    public float GetRandomPosition()
+    private float GetRandomPosition()
     {
         return Random.Range(_minCoordinateOfPosition, _maxCoordinateOfPosition);
     }
 
-    public Cube CreateClon()
+    private Cube CreateClon()
     {
         Cube clon = Instantiate(_obj, new Vector3(_obj.transform.position.x + GetRandomPosition(), 0.5f, _obj.transform.position.z + GetRandomPosition()), Quaternion.identity);
         clon.ChangeScale();
