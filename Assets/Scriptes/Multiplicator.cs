@@ -14,17 +14,16 @@ public class Multiplicator : MonoBehaviour
     private float _minCoordinateOfPosition = -1;
     private float _maxCoordinateOfPosition = 1;
     private int _minNumberOfObjects = 2;
-    private int _maxNumberOfObjects = 7;
-    private int _counterOfObjects;
+    private int _maxNumberOfObjects = 6;
 
     public void Awake()
     {
         _exploder = GetComponent<Exploder>();
     }
 
-    public void ExplodeCube()
+    public void ExplodeCube(float force)
     {
-        _exploder.DeleteCube(_cubes);
+        _exploder.DeleteCube(_cubes, force);
     }
 
     public void ClonObjects()
@@ -54,11 +53,9 @@ public class Multiplicator : MonoBehaviour
 
         _cubes = new List<Cube>();
 
-        while (_counterOfObjects < numberOfObjects)
+        for (int i = 0; i <= numberOfObjects; i++)
         {
             _cubes.Add(CreateClon());
-            
-            _counterOfObjects++;
         }
     }
 
@@ -72,7 +69,8 @@ public class Multiplicator : MonoBehaviour
         Cube clon = Instantiate(_cube, new Vector3(_cube.transform.position.x + GetRandomPosition(), 0.5f, _cube.transform.position.z + GetRandomPosition()), Quaternion.identity);
         clon.ChangeScale();
         clon.ChangeColor();
-        clon.CangeChance();
+        clon.ReduceChance();
+        clon.IncreaseSelfForce();
 
         return clon;
     }

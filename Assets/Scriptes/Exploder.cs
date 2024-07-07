@@ -7,24 +7,54 @@ public class Exploder : MonoBehaviour
     [SerializeField] private float _strikeRadius;
     [SerializeField] private float _strikeForce;
 
-    public void DeleteCube(List<Cube> objects)
+    public void DeleteCube(List<Cube> objects, float force)
     {
         Destroy(_obj);
-        Explode(objects);
+
+        if (objects != null)
+        {
+            ExplodeClonedCubes(objects);
+        }
+        else
+        {
+            ExplodeSomeCubes(force);
+        }
     }
 
-    private void Explode(List<Cube> discarded—ubes)
+    private void ExplodeClonedCubes(List<Cube> discardedCubes)
     {
-        List<Rigidbody> struckObjects = new();
-
-        if (discarded—ubes != null)
+        if (discardedCubes != null)
         {
-            foreach (Cube element in discarded—ubes)
+            foreach (Cube element in discardedCubes)
             {
                 Rigidbody body = element.GetComponent<Rigidbody>();
-                body.AddExplosionForce(_strikeForce, transform.position, _strikeRadius);
-                struckObjects.Add(body);
+                body.AddExplosionForce(_strikeForce, transform.position, _strikeRadius, 0.5f, ForceMode.Force);
             }
         }
+    }
+
+    private void ExplodeSomeCubes(float force)
+    {
+        foreach (Rigidbody body in GetSomeCubes())
+        {
+            body.AddExplosionForce(force, transform.position, _strikeRadius);
+        }
+    }
+
+    private List<Rigidbody> GetSomeCubes()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, _strikeRadius);
+
+        List<Rigidbody> cubes = new();
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.attachedRigidbody != null)
+            {
+                cubes.Add(hit.attachedRigidbody);
+            }
+        }
+
+        return cubes;
     }
 }
