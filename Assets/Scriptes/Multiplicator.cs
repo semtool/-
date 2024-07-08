@@ -9,7 +9,6 @@ public class Multiplicator : MonoBehaviour
     private List<Cube> _cubes;
     private float _maxNumber = 0;
     private float _minNumber = 10;
-    private float _currentChance;
     private float _randomNumber;
     private float _minCoordinateOfPosition = -1;
     private float _maxCoordinateOfPosition = 1;
@@ -26,14 +25,13 @@ public class Multiplicator : MonoBehaviour
         _exploder.DeleteCube(_cubes, force);
     }
 
-    public void ClonObjects()
+    public void ClonObjects(Cube cube)
     {
-        _currentChance = _cube.GetChance();
         _randomNumber = GetRandomNumber();
 
-        if (_randomNumber <= _currentChance)
+        if (_randomNumber <= cube.ChanceToDivide)
         {
-            CreateClones();
+            CreateClones(cube);
         }
     }
 
@@ -47,7 +45,7 @@ public class Multiplicator : MonoBehaviour
         return Random.Range(_minNumber, _maxNumber);
     }
 
-    private void CreateClones()
+    private void CreateClones(Cube cube)
     {
         int numberOfObjects = GetRandomNumberOfObjects();
 
@@ -55,23 +53,12 @@ public class Multiplicator : MonoBehaviour
 
         for (int i = 0; i <= numberOfObjects; i++)
         {
-            _cubes.Add(CreateClon());
+            _cubes.Add(cube.CreateClon(GetRandomPosition()));
         }
     }
 
     private float GetRandomPosition()
     {
         return Random.Range(_minCoordinateOfPosition, _maxCoordinateOfPosition);
-    }
-
-    private Cube CreateClon()
-    {
-        Cube clon = Instantiate(_cube, new Vector3(_cube.transform.position.x + GetRandomPosition(), 0.5f, _cube.transform.position.z + GetRandomPosition()), Quaternion.identity);
-        clon.ChangeScale();
-        clon.ChangeColor();
-        clon.ReduceChance();
-        clon.IncreaseSelfForce();
-
-        return clon;
     }
 }
