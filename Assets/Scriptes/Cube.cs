@@ -4,59 +4,49 @@ using UnityEngine;
 
 public class Cube : MonoBehaviour
 {
-    [SerializeField] private Cube _cube;
     [SerializeField] private float _chanceToDivide = 10;
     [SerializeField] private float _selfForce;
 
-    public float ChanceToDivide => _chanceToDivide;
-
-    private Multiplicator _multiplicator;
     private Material _color;
+    private Multiplicator _multiplicator;
+    private Exploder _exploder;
     private float _reductorOfProbability = 2;
     private float _increasorOfForce = 1.5f;
     private float _scale;
     private float _reductor = 2f;
+
+    public float ChanceToDivide => _chanceToDivide;
 
 
     public void Awake()
     {
         _color = GetComponent<Renderer>().material;
         _multiplicator = GetComponent<Multiplicator>();
+        _exploder = GetComponent<Exploder>();
     }
 
     public void OnMouseUpAsButton()
     {
-        _multiplicator.ClonObjects(_cube);
-        _multiplicator.ExplodeCube(_selfForce);
+        _multiplicator.ClonObjects();
+        _exploder.DeleteCube(_multiplicator.Cubes, _selfForce);
     }
 
-    public Cube CreateClon(float offset)
-    {
-        Cube clon = Instantiate(_cube, new Vector3(_cube.transform.position.x + offset, 0.5f, _cube.transform.position.z + offset), Quaternion.identity);
-        clon.ChangeScale();
-        clon.ChangeColor();
-        clon.ReduceChance();
-        clon.IncreaseSelfForce();
-
-        return clon;
-    }
-
-    private void ChangeScale()
+    public void ChangeScale()
     {
         transform.localScale = Vector3.one * GetScale();
     }
 
-    private void ChangeColor()
+    public void ChangeColor()
     {
         _color.color = new Color(GetConponentOfColor(), GetConponentOfColor(), GetConponentOfColor());
     }
 
-    private void ReduceChance()
+    public void ReduceChance()
     {
         _chanceToDivide /= _reductorOfProbability;
     }
 
-    private void IncreaseSelfForce()
+    public void IncreaseSelfForce()
     {
         _selfForce *= _increasorOfForce;
     }

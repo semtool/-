@@ -3,17 +3,16 @@ using UnityEngine;
 
 public class Exploder : MonoBehaviour
 {
-    [SerializeField] private GameObject _obj;
     [SerializeField] private float _strikeRadius;
     [SerializeField] private float _strikeForce;
 
-    public void DeleteCube(List<Cube> objects, float force)
+    public void DeleteCube(List<Cube> cubes, float force)
     {
-        Destroy(_obj);
+        Destroy(gameObject);
 
-        if (objects != null)
+        if (cubes != null)
         {
-            ExplodeClonedCubes(objects);
+            ExplodeClonedCubes(cubes);
         }
         else
         {
