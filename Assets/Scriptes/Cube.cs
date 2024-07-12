@@ -36,7 +36,7 @@ public class Cube : MonoBehaviour
 
     public Cube Initialize()
     {
-        Cube clon = Instantiate(this, new Vector3(gameObject.transform.position.x + GetRandomPosition(), 0.5f, gameObject.transform.position.z + GetRandomPosition()), Quaternion.identity);
+        Cube clon = Instantiate(this, new Vector3(transform.position.x + GetRandomPosition(), 0.5f, transform.position.z + GetRandomPosition()), Quaternion.identity);
 
         ChangeClonParameters(clon);
 
