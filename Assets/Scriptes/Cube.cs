@@ -1,22 +1,25 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Renderer))]
 [RequireComponent(typeof(Multiplicator))]
+[RequireComponent(typeof(Exploder))]
 
 public class Cube : MonoBehaviour
 {
-    [SerializeField] private float _chanceToDivide = 10;
     [SerializeField] private float _selfForce;
 
     private Material _color;
     private Multiplicator _multiplicator;
     private Exploder _exploder;
+    private float _chanceToDivide = 10;
     private float _reductorOfProbability = 2;
     private float _increasorOfForce = 1.5f;
     private float _scale;
     private float _reductor = 2f;
+    private float _minCoordinateOfPosition = -1;
+    private float _maxCoordinateOfPosition = 1;
 
     public float ChanceToDivide => _chanceToDivide;
-
 
     public void Awake()
     {
@@ -31,24 +34,26 @@ public class Cube : MonoBehaviour
         _exploder.DeleteCube(_multiplicator.Cubes, _selfForce);
     }
 
-    public void ChangeScale()
+    public Cube Initialize()
+    {
+        Cube clon = Instantiate(this, new Vector3(gameObject.transform.position.x + GetRandomPosition(), 0.5f, gameObject.transform.position.z + GetRandomPosition()), Quaternion.identity);
+
+        ChangeClonParameters(clon);
+
+        return clon;
+    }
+
+    private void ChangeClonParameters(Cube clon)
+    {
+        clon.ChangeScale();
+        clon.ChangeColor();
+        clon.ReduceChance();
+        clon.IncreaseSelfForce();
+    }
+
+    private void ChangeScale()
     {
         transform.localScale = Vector3.one * GetScale();
-    }
-
-    public void ChangeColor()
-    {
-        _color.color = new Color(GetConponentOfColor(), GetConponentOfColor(), GetConponentOfColor());
-    }
-
-    public void ReduceChance()
-    {
-        _chanceToDivide /= _reductorOfProbability;
-    }
-
-    public void IncreaseSelfForce()
-    {
-        _selfForce *= _increasorOfForce;
     }
 
     private float GetScale()
@@ -57,8 +62,28 @@ public class Cube : MonoBehaviour
         return _scale / _reductor;
     }
 
+    private void ChangeColor()
+    {
+        _color.color = new Color(GetConponentOfColor(), GetConponentOfColor(), GetConponentOfColor());
+    }
+
     private float GetConponentOfColor()
     {
         return Random.Range(0, 1f);
+    }
+
+    private void ReduceChance()
+    {
+        _chanceToDivide /= _reductorOfProbability;
+    }
+
+    private void IncreaseSelfForce()
+    {
+        _selfForce *= _increasorOfForce;
+    }
+
+    private float GetRandomPosition()
+    {
+        return Random.Range(_minCoordinateOfPosition, _maxCoordinateOfPosition);
     }
 }

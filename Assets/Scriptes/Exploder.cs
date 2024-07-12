@@ -16,7 +16,7 @@ public class Exploder : MonoBehaviour
         }
         else
         {
-            ExplodeSomeCubes(force);
+            ExplodesSurroundingCubes(force);
         }
     }
 
@@ -32,7 +32,7 @@ public class Exploder : MonoBehaviour
         }
     }
 
-    private void ExplodeSomeCubes(float force)
+    private void ExplodesSurroundingCubes(float force)
     {
         foreach (Rigidbody body in GetSomeCubes())
         {
